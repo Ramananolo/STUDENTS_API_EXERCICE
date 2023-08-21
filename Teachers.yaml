@@ -1,0 +1,126 @@
+openapi: 3.0.0
+info:
+  title: Teachers
+  description: Informations des enseignants
+  version: 3.0.0
+
+paths:
+  /teachers:
+    get:
+      summary: La liste des enseignants
+      description: La liste complète des enseignants.
+      responses:
+        "200":
+          description: Liste des enseignants récupérée.
+          content:
+            application/json:
+              example:
+                teachers:
+                  - id: 0
+                    nom: Tokimahery
+                    prenom: Ramarozaka
+                    birthdate: 1985-12-10
+                    nomDuCours: Prog2
+                    dureeDuCours: 60
+                  - id: 1
+                    nom: Harry
+                    prenom: RAKOTONDRANTOMBO
+                    birthdate: 1978-07-25
+                    nomDuCours: SYS1
+                    dureeDuCours: 45
+
+    post:
+      summary: Nouvel enseignant
+      description: Ajouter un nouvel enseignant à la liste.
+      requestBody:
+        description: Nouvel enseignant
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Teacher"
+      responses:
+        "201":
+          description: Enseignant créé.
+        "400":
+          description: Erreur de validation.
+
+  /teachers/{teacherId}:
+    get:
+      summary: Détails de l'enseignant
+      description: Obtenir les détails d'un enseignant par son ID.
+      parameters:
+        - name: teacherId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID de l'enseignant à obtenir.
+      responses:
+        "200":
+          description: Détails de l'enseignant récupérés.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Teacher"
+        "404":
+          description: Enseignant non trouvé.
+
+    put:
+      summary: Mettre à jour un enseignant
+      description: Mettre à jour les informations d'un enseignant existant.
+      parameters:
+        - name: teacherId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID de l'enseignant à mettre à jour.
+      requestBody:
+        description: Informations mises à jour de l'enseignant
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Teacher"
+      responses:
+        "200":
+          description: Enseignant mis à jour.
+        "404":
+          description: Enseignant non trouvé.
+
+    delete:
+      summary: Supprimer un enseignant
+      description: Supprimer un enseignant par son ID.
+      parameters:
+        - name: teacherId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID de l'enseignant à supprimer.
+      responses:
+        "204":
+          description: Enseignant supprimé.
+        "404":
+          description: Enseignant non trouvé.
+
+components:
+  schemas:
+    Teacher:
+      type: object
+      properties:
+        id:
+          type: integer
+        nom:
+          type: string
+        prenom:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        nomDuCours:
+          type: string
+        dureeDuCours:
+          type: integer
+          description: Durée du cours en minutes
