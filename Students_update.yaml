@@ -1,0 +1,117 @@
+openapi: 3.0.0
+info:
+  title: Students
+  description: Informations des étudiants
+  version: 3.0.0
+
+paths:
+  /students:
+    get:
+      summary: La liste des étudiants
+      description: La liste complète des étudiants.
+      responses:
+        "200":
+          description: Liste des étudiants récupérée.
+          content:
+            application/json:
+              example:
+                students:
+                  - id: 0
+                    nom: Rakoto
+                    prenom: Jean
+                    birthdate: 2004-08-15
+                  - id: 1
+                    nom: Rabe
+                    prenom: Alice
+                    birthdate: 1999-03-22
+
+    post:
+      summary: Nouvel étudiant
+      description: Ajouter un nouvel étudiant à la liste.
+      requestBody:
+        description: Nouvel étudiant
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Student"
+      responses:
+        "201":
+          description: Étudiant créé.
+        "400":
+          description: Erreur de validation.
+
+  /students/{studentId}:
+    get:
+      summary: Détails de l'étudiant
+      description: Obtenir les détails d'un étudiant par son ID.
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID de l'étudiant à obtenir.
+      responses:
+        "200":
+          description: Détails de l'étudiant récupérés.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "404":
+          description: Étudiant non trouvé.
+
+    put:
+      summary: Mettre à jour un étudiant
+      description: Mettre à jour les informations d'un étudiant existant.
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID de l'étudiant à mettre à jour.
+      requestBody:
+        description: Informations mises à jour de l'étudiant
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Student"
+      responses:
+        "200":
+          description: Étudiant mis à jour.
+        "404":
+          description: Étudiant non trouvé.
+
+    delete:
+      summary: Supprimer un étudiant
+      description: Supprimer un étudiant par son ID.
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID de l'étudiant à supprimer.
+      responses:
+        "204":
+          description: Étudiant supprimé.
+        "404":
+          description: Étudiant non trouvé.
+
+components:
+  schemas:
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+        nom:
+          type: string
+        prenom:
+          type: string
+        birthdate:
+          type: string
+          format: date
